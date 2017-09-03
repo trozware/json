@@ -1,5 +1,7 @@
 import Foundation
 
+// Changing Property Names
+
 let jsonString = """
 {
 "name1": "Jane",
@@ -22,6 +24,8 @@ let jsonDecoder = JSONDecoder()
 let person = try? jsonDecoder.decode(Person.self, from: jsonData)
 dump(person)
 
+
+// Date Handling
 
 let jsonString2 = """
 {
@@ -52,6 +56,46 @@ if let backToJson = try? jsonEncoder.encode(project) {
     }
 }
 
+
+// Allowing For Nulls
+
+struct Role: Codable {
+    let firstName: String
+    let lastName: String
+    let nickName: String?
+}
+
+let jsonStringWithNulls = """
+[
+{
+"firstName": "Sally",
+"lastName": "Sparrow",
+"nickName": null
+},
+{
+"firstName": "Doctor",
+"lastName": "Who",
+"nickName": "The Doctor"
+}
+]
+"""
+let jsonDataWithNulls = jsonStringWithNulls.data(using: .utf8)!
+
+let jsonDecoder3 = JSONDecoder()
+let roles = try? jsonDecoder3.decode(Array<Role>.self, from: jsonDataWithNulls)
+dump(roles)
+
+let jsonEncoder2 = JSONEncoder()
+jsonEncoder2.outputFormatting = .prettyPrinted
+
+if let backToJsonWithNulls = try? jsonEncoder2.encode(roles) {
+    if let jsonString = String(data: backToJsonWithNulls, encoding: .utf8) {
+        print(jsonString)
+    }
+}
+
+// Property Lists
+
 let plistEncoder = PropertyListEncoder()
 plistEncoder.outputFormat = .xml
 if let plist = try? plistEncoder.encode(project) {
@@ -64,4 +108,3 @@ if let plist = try? plistEncoder.encode(project) {
 
     dump(project2)
 }
-

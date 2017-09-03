@@ -43,13 +43,14 @@ struct User: Codable {
 }
 
 let jsonDecoder = JSONDecoder()
-let users = try? jsonDecoder.decode(Array<User>.self,
-                                    from: jsonData)
 
-users?.count
-dump(users?.first)
+do {
+    let users = try jsonDecoder.decode(Array<User>.self,
+                                       from: jsonData)
 
-if let users = users {
+    users.count
+    dump(users.first)
+
     let jsonEncoder = JSONEncoder()
     jsonEncoder.outputFormatting = .prettyPrinted
 
@@ -58,5 +59,8 @@ if let users = users {
             print(jsonString)
         }
     }
+}
+catch {
+    print(error)
 }
 
